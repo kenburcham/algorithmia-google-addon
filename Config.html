@@ -1,0 +1,54 @@
+<!-- Algorithmia Sidebar Settings for Google Sheets Add-on -->
+<!-- By Ken Burcham - January, 2018 -->
+
+<!-- head -->
+<link href="https://ssl.gstatic.com/docs/script/css/add-ons.css" rel="stylesheet"> 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+
+<!-- body -->
+<img src="https://blog.algorithmia.com/wp-content/uploads/2016/01/AL001C_Logo_Logotype_Large.png" width="275">
+<hr/>
+<a href="#" onClick="google.script.run.showSidebar(); preventDefault();">Use Algorithms</a> | <b>Configuration</b><br/>
+<p>All requests to Algorithmia require a valid Algorithmia account (<a href="https://algorithmia.com/signup" target="_blank">click here to create one!</a>) and API key. Your first 10,000 API calls each
+month are free, which is plenty to get you started. <a href="https://algorithmia.com/user#credentials" target="_blank">Click here to find your API key</a> and then paste it in the field below.</p>
+<div class="sidebar">
+  <div class="block form-group">
+      <input type="text" name="api_key" id="api_key">
+    <button class="blue" id="save_api_key">Save</button>
+  </div>
+  <div class="block" id="results"></div>
+</div>
+
+
+<script>
+
+//success callback when we get the api key back.
+function setApiKeyInTextfield(property_api_key)
+{
+ if(property_api_key){
+   $('#api_key').val(property_api_key); //set in the field as current value.
+ }
+}
+
+//success callback when we save the api key.
+function setSaveResultText(result){
+  $('#results').text(result);
+}   
+
+//fire things up!
+ $(function() {
+  
+  // Get the value for the user property 'API_KEY'.
+  google.script.run.withSuccessHandler(setApiKeyInTextfield).getUserPropertyValue('API_KEY');
+
+   $('#save_api_key').click(function() {
+     $('#results').text("saving...");
+     var in_api_key = $('#api_key').val();
+
+     if(in_api_key) {
+       google.script.run.withSuccessHandler(setSaveResultText).setUserPropertyValue('API_KEY', in_api_key);
+     }
+   });
+ 
+ });
+</script>

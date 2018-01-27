@@ -1,0 +1,73 @@
+<!-- Algorithmia Sidebar for Google Sheets Add-on -->
+<!-- By Ken Burcham - January, 2018 -->
+
+<!-- head -->
+<link href="https://ssl.gstatic.com/docs/script/css/add-ons.css" rel="stylesheet"> 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+
+<!-- body -->
+<img src="https://blog.algorithmia.com/wp-content/uploads/2016/01/AL001C_Logo_Logotype_Large.png" width="275">
+<hr/>
+<b>Use Algorithms</b> | <a href="#" onClick="google.script.run.showConfig(); preventDefault();">Configuration</a><br/>
+<i>Add AI to your Google Sheets</i>
+<p>
+First, click on a cell that you want to take action on, then choose the action from the dropdown below that you want. Then click 'Go!'.</p>
+<p>The adjacent cell to the right will be populated with the magic you asked for!</p>
+<div class="sidebar">
+  <div class="block form-group">
+    <select id="algorithm" name="algorithm">
+    <option selected=selected>Select a function...</option>
+    </select>
+    <button class="blue" id="load_algorithm">Go!</button>
+  </div>
+  <div id="algorithm-description"></div>
+</div>
+
+<script>
+
+//success handler for populating the algorithm dropdown.
+function populateAlgorithmDropdown(algorithms){
+
+   $.each(algorithms, function(key, value) {   
+     $('#algorithm')
+         .append($("<option></option>")
+                    .attr("value",key)
+                    .text(value.label)); 
+   });
+}
+
+//success handler to display the algorithm description after selection.
+function showAlgorithmDescription(algorithm){
+  $('#algorithm-description').html('<h2>'+algorithm.name+'</h2>'+algorithm.description);
+}
+
+
+// Attach click handlers after the sidebar has loaded 
+ $(function() {
+
+   //asych call to get the algorithms to populate our dropdown
+   google.script.run.withSuccessHandler(populateAlgorithmDropdown).getAlgorithms();
+
+   //when they click "GO" we run the algorithm.
+   $('#load_algorithm')
+    .click(function() {
+      var to_run = $('#algorithm').val();
+      google.script.run.runAlgorithm(to_run);
+    });
+    
+    //when they select a new dropdown item, fetch that algorithm and display the description.
+    $('#algorithm')
+    .change(function(){
+      var item=$(this);
+      google.script.run.withSuccessHandler(showAlgorithmDescription).getAlgorithm(item.val());
+    });
+   
+   // if the user presses the enter, same as clicking GO
+   $('#search').keyup(function(e) {
+      if (e.keyCode === 13) {
+         $('#load_algorithm').click();
+      }
+   });
+   
+ });
+</script>
