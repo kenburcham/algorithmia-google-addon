@@ -4,9 +4,13 @@ Google Sheets is a collaborative, extensible online spreadsheet tool used by stu
 
 > "How can I get the benefits of AI in my spreadsheet?"
 
-In this article, we'll introduce you to "Algorithmia's Google Sheet Add-on" that lets you add algorithms running on Algorithmia's cloud infrastructure right that can act on your own data in your Google Sheet.
+In this article, we'll introduce you to Algorithmia's Google Sheet Add-on that enables you to add algorithms running on Algorithmia's cloud infrastructure right that can act on your own data in your Google Sheet.
 
-Algorithmia is a ...
+Algorithmia offers a serverless, scalable GPU cloud for scalable AI algorithms. Developers can create and host sophisticated AI functions and learning models that can do machine learning tasks like visual recognition, sentiment analysis, natural language summaries as well as handy utilities like validating email addresses, extracting URLs or snail mail addresses from a website. 
+
+Typically, a developer connects these functions into their software programs, but with the Google Sheets add-on, we can integrate these powerful abilities directly into the business tools we use every day.
+
+Let's see how this works!
 
 ## Objective 1: Get your Algorithmia API key
 First, you'll need to setup a [free Algorithmia account](https://algorithmia.com/signup) which includes 5,000 free credits a month, and copy your API key found under [My Profile](https://algorithmia.com/user#credentials) > Credentials. You need an API key to setup your Algorithmia Google Sheet's Add-on. 
@@ -111,6 +115,11 @@ This is an example of an algorithm that is run on-demand through the sidebar ins
 
 ## Conclusion and next steps
 
+The Algorithmia Google Sheets add-on enables you to bring Algorithmia's hosted AI algorithms into your spreadsheets so that you can accomplish powerful workflows! Its like AI power tools in your spreadsheet!
+
+While Algorithmia has thousands of algorithms, the add-on currently supports only a select handful. We will add more and more as time goes on, focusing on use cases that offer value for use in spreadsheets. Let us know if you have some you'd like to add. Or if you're a developer, roll up your sleeves and add it yourself into your own copy of the add-on. 
+
+Enjoy!
 
 
 
