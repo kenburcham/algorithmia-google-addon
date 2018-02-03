@@ -56,6 +56,7 @@ You will find the following examples in the tabs along the bottom of the sheet:
 * Outgoing Links Summarizer - Pulls in all of the outgoing links on a webpage (those that will take you off the site) and then generates a summary for each. Handy for generating your daily news page!
 * Email Extractor - Scrapes a webpage and discovers all of the email addresses and adds them to your spreadsheet. Not for use with spam! But useful for finding a sales contact you were looking for.
 * Tweet Feeder - Loads recent tweets that match a keywork and copies them into your sheet. You could then run the sentiment function and sort on negative tweets for statistical analysis.
+* Choose Your Own - Run any algorithm in [Algorithmia's AI Marketplace](https://algorithmia.com/algorithms). Just paste in the Algo URL and give it a try. (EXPERIMENTAL)
 
 Each of these examples has a tab with instructions and explanation. We encourage you to work through each one to understand how you might use these templates in your own workflow.
 
@@ -113,11 +114,25 @@ Notice how the filled in results are NOT an ALGO formula but the actual text con
 
 This is an example of an algorithm that is run on-demand through the sidebar instead of through the ALGO formula because it returns more than one value and so must be copied into many cells.
 
+### Part 3: Choose Your Own Algorithm
+
+There is one more option in the dropdown: "User Defined". It is an experimental option that gives you the ability to run any algorithm in Algorithmia's AI Marketplace. You should note, that since some algorithms expect special inputs or give special outputs, our one-size-fits-all User Defined option doesn't always work. But give it a try!
+
+Step 1: Copy the Algo URL that you want to run:
+
+![copy the algourl](images/copy_algo_url.png)
+
+Step 2: Choose "User Defined" from the Use Algorithms sidebar and paste the Algo URL into the field.
+
+![choose your own](images/choose_your_own.png)
+
+The tab "Choose Your Own" on the Templates and Examples sheet has an example and more information that might be helpful.
+
 ## Conclusion and next steps
 
 The Algorithmia Google Sheets add-on enables you to bring Algorithmia's hosted AI algorithms into your spreadsheets so that you can accomplish powerful workflows! Its like AI power tools in your spreadsheet!
 
-While Algorithmia has thousands of algorithms, the add-on currently supports only a select handful. We will add more and more as time goes on, focusing on use cases that offer value for use in spreadsheets. Let us know if you have some you'd like to add. Or if you're a developer, roll up your sleeves and add it yourself into your own copy of the add-on. 
+While Algorithmia has thousands of algorithms, the add-on currently supports only a select handful. We will add more and more as time goes on, focusing on use cases that offer value for use in spreadsheets. But feel free to try the "User Defined" option to run any algorithm in the marketplace. Let us know if you have some you'd like to add. Or if you're a developer, roll up your sleeves and add it yourself into your own copy of the add-on. 
 
 Enjoy!
 
