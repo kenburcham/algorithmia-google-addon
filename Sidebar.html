@@ -18,6 +18,7 @@ First, click on a cell that you want to take action on, then choose the action f
     <select id="algorithm" name="algorithm">
     <option selected=selected>Select a function...</option>
     </select>
+    <div id="algoURL" style="margin-top: 10px; margin-bottom: 10px;"><label>ALGO URL (experimental):</label><input name="algoURLText" id="algoURLText" type="text"></div>
     <button class="blue" id="load_algorithm">Go!</button>
   </div>
   <div id="algorithm-description"></div>
@@ -38,12 +39,20 @@ function populateAlgorithmDropdown(algorithms){
 
 //success handler to display the algorithm description after selection.
 function showAlgorithmDescription(algorithm){
+  
+  if(algorithm.showALGOfield)
+     $('#algoURL').show();
+  else
+     $('#algoURL').hide();
+  
   $('#algorithm-description').html('<h2>'+algorithm.name+'</h2>'+algorithm.description);
 }
 
 
 // Attach click handlers after the sidebar has loaded 
  $(function() {
+
+   $('#algoURL').hide(); //hide this field right away -- only show it if we need it.
 
    //asych call to get the algorithms to populate our dropdown
    google.script.run.withSuccessHandler(populateAlgorithmDropdown).getAlgorithms();
@@ -52,7 +61,8 @@ function showAlgorithmDescription(algorithm){
    $('#load_algorithm')
     .click(function() {
       var to_run = $('#algorithm').val();
-      google.script.run.runAlgorithm(to_run);
+      var algoURL = $('#algoURLText').val();
+      google.script.run.runAlgorithm(to_run, algoURL);
     });
     
     //when they select a new dropdown item, fetch that algorithm and display the description.

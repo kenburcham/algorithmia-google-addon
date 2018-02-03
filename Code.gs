@@ -22,8 +22,10 @@
 var api_key = getUserPropertyValue('API_KEY');
 
 if(!api_key)
-  Logger.log("Greetings! Please make sure to setup your api key in the Settings menu.");
-
+{
+  Logger.log("No api key found.");
+}
+  
 
 //couple of constants
 var DIRECTION_RIGHT = 1;
@@ -132,11 +134,9 @@ function add_algorithm(a_algorithm){
 * @param {string} a_algorithm Name of the algorithm to run
 * @returns void
 */
-function runAlgorithm(a_algorithm){
+function runAlgorithm(a_algorithm, a_algoURL){
   Logger.log("runAlgorithm: " + a_algorithm);
-  
-  //var ss = SpreadsheetApp.getActiveSpreadsheet();
-  //var sheet = ss.getSheets()[0];
+  Logger.log("algoURL: " + a_algoURL);
   
   sheet = SpreadsheetApp.getActiveSheet();
   
@@ -161,7 +161,11 @@ function runAlgorithm(a_algorithm){
     
      Logger.log("running non-formula from sidebar for " + a_algorithm );
      var algo_to_run = algorithm.action;
-     algo_to_run(a_cell.getValue());
+    
+     if(a_algorithm == 'user-defined')
+       algo_to_run(a_cell.getValue(), a_algoURL);
+     else
+       algo_to_run(a_cell.getValue());
   }
 }
 
@@ -193,7 +197,7 @@ add_algorithm(
     name:"analyze-url",
     label: "Analyze URL: Summary",
     isFormula: true, //when this is true, our call will return a single value so we can use the ALGO formula
-    description: "Analyze a URL and return a summary of the page in the next cell.",
+    description: "Analyze a URL and return a summary of the page in the next cell. <hr/>=ALGO('analyze-sentiment')<hr/>Inserts ALGO function in the adjacent cell to the right of selected cell.",
     action: function(a_inputURL){
 
        var input = [a_inputURL];
@@ -221,7 +225,7 @@ add_algorithm(
     name: "analyze-sentiment",
     label: "Analyze Sentiment",
     isFormula: true,
-    description: "Analyze a cell's text contents and return a sentiment score from -1 (very negative) to +1 (very positive) where 0 is neutral.",
+    description: "Analyze a cell's text contents and return a sentiment score from -1 (very negative) to +1 (very positive) where 0 is neutral. <hr/>=ALGO('analyze-sentiment')<hr/>Inserts ALGO function in the adjacent cell to the right of selected cell.",
     action: function(a_inputText){
       var input = {"document": a_inputText};
       Logger.log("running analyze sentiment on "+a_inputText);
@@ -248,7 +252,7 @@ add_algorithm(
     name: "email-validator",
     label: "Email Validator",
     isFormula: true,
-    description: "Validate an email address meets just the most basic structure.",
+    description: "Validate an email address meets just the most basic structure.<hr/>=ALGO('email-validator')<hr/>Inserts ALGO function in the adjacent cell to the right of selected cell.",
     action: function(a_inputText){
       var input = a_inputText;
       
@@ -271,7 +275,7 @@ add_algorithm(
     name: "social-media-shares",
     label: "Social Media Shares",
     isFormula: false, //because we return more than one results
-    description: "For a web address (URL) find the number of social media shares for Facebook, Pinterest and LinkedIn. (20 credit royalty)",
+    description: "For a web address (URL) find the number of social media shares for Facebook, Pinterest and LinkedIn. (20 credit royalty). <hr/>Runs algorithm and copies results to the adjacent cells to the right.",
     action: function(a_inputText){
       var input = a_inputText;
       
@@ -307,7 +311,7 @@ add_algorithm(
     name: "contact-extraction",
     label: "Contact Info Extraction",
     isFormula: false, //because we return more than one results
-    description: "For a web address (URL) extract the contact information (100 credit royalty)",
+    description: "For a web address (URL) extract the contact information (100 credit royalty). <hr/>Runs algorithm and copies results to adjacent cells to the right.",
     action: function(a_inputText){
       var input = a_inputText;
       
@@ -349,7 +353,7 @@ add_algorithm(
     name: "get-links",
     label: "Extract Links from Page",
     isFormula: false, //because we return more than one results
-    description: "For a webpage, extract all of the URLs on the page into a list (down).",
+    description: "For a webpage, extract all of the URLs on the page into a list. <hr/>Runs algorithm and copies results DOWN the cells in the adjacent column to the right",
     action: function(a_inputText){
       var input = a_inputText;
       
@@ -382,7 +386,7 @@ add_algorithm(
     name: "get-emails",
     label: "Extract Emails from Page",
     isFormula: false, //because we return more than one results
-    description: "For a webpage, extract all of the email addresses on the page into a list (down). (10 credit royalty)",
+    description: "For a webpage, extract all of the email addresses on the page into a list (10 credit royalty).<hr/>Runs algorithm and copies results DOWN the cells in the adjacent column to the right.",
     action: function(a_inputText){
       var input = { url: a_inputText };
       
@@ -414,7 +418,7 @@ add_algorithm(
     name: "tweet-feeder",
     label: "Search Twitter",
     isFormula: false, //because we return more than one results
-    description: "Search Twitter for matches to a keyword.",
+    description: "Search Twitter for matches to a keyword. <hr/>Runs algorithm and copies results DOWN the cells in the adjacent column to the right.",
     action: function(a_inputText){
       var input = a_inputText;
       
@@ -440,6 +444,42 @@ add_algorithm(
     }
   });
 
+add_algorithm(
+  {
+    name: "user-defined",
+    label: "User Defined",
+    isFormula: false,
+    showALGOfield: true,
+    description: "<b>Experimental!</b> Run your own choice of algorithm by pasting the URL from algorithmia into the field above. <br/> 1) Browse <a href='https://algorithmia.com/algorithms' target='_blank'>Algorithmia Marketplace</a> and find an algorithm you want to run on your data. <br/> 2) Paste the algorithm address (like: 'nlp/Summarizer/0.1.6' into the field above. <br/> 3) Click GO!<hr/>Your selected cell's value will be sent as the input and the output will be displayed in the adjacent field to the right. (Maybe. If it works!)",
+    action: function(a_inputText, a_algoURL){
+      var input = a_inputText;
+      
+      if(!a_inputText){
+        Logger.log("No input given for algorithm");
+        return;
+      }
+      
+      Logger.log("running user-defined algorithm " + a_algoURL + " on input: " + input);
+      
+      var result = Algorithmia.client(api_key)
+         .algo(a_algoURL)
+         .pipe(input);
+      
+      Logger.log(result);
+      
+      if(result)
+      {
+        if(Array.isArray(result)){
+         copyToAdjacentCells(result, DIRECTION_DOWN);
+        }else{
+          copyToAdjacentCells([result]);
+        }
+      }else{
+        copyToAdjacentCells(["no result"]);
+      }
+    }
+  });
+      
 /**
 * takes an array of values and writes them out to the adjacent cells
 * @param {Array} a_data An array of data to copy into the spreadsheet.
